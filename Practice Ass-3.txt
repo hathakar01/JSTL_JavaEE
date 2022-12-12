@@ -1,0 +1,116 @@
+
+
+db.student.insertMany([
+{
+	regNo : "3014",
+	name:"Test Student",
+	courseName: "MCA",
+	duration:1,
+	gradper:70,
+	address: {
+		city:"Changa",
+		state:"GJ",
+		country:"India"
+	}},
+	{
+	regNo : "3015",
+	name:"Harshal",
+	courseName: "BCA",
+	duration:3,
+	HSCper:90,
+	address: {
+		city:"surat",
+		state:"MH",
+		country:"India"
+	}},
+	{
+	regNo : "3016",
+	name:"Hiral",
+	courseName: "MBA",
+	duration:8,
+	gradper:40,
+	address: {
+		city:"Anand",
+		state:"GJ",
+		country:"India"
+	}},
+	{
+	regNo : "3017",
+	name:"Om",
+	courseName: "MCA",
+	duration:6,
+	HSCper:40,
+	address: {
+		city:"Lonavala",
+		state:"MH",
+		country:"India"
+	}}
+])
+
+
+db.student.update({name:"Test Student"},{$set:{name:"Ami"}})
+
+db.student.find({"name":/^H/})
+
+db.student.find({"name":/l$/})
+
+db.student.find({"courseName":MCA})
+
+db.student.find({},{_id:0,"regNo":1,"name":1})
+
+
+db.student.find({},{_id:0,"regNo":1,"name":1,"courseName":1,"duration":1}).sort({duration:1})
+
+db.student.find({"courseName":"MCA"}).count()
+
+db.student.aggregate([
+{
+	$group:{"_id":"$courseName",Average:{$avg:"$last"}}
+}
+])
+
+db.student.updateMany({},{$set:{"last":80}})
+
+db.student.aggregate([
+	{$match:{courseName:"MCA"}},
+	{$group:{"_id":"$courseName",
+		Average:{$avg:"$last"}}	
+	}
+])
+
+
+db.student.find({"$and":
+	[{"courswName":"MCA"},{"last":{$gt:60}}]
+}).count()
+
+db.student.aggregate([
+	{$match:{'last':{$gt:50}}},
+	{$group:{"_id":"courseName",
+		Average:{"$avg":"$last"}}}
+])
+
+db.student.find({"address.state":{"$ne":'GJ'}})
+
+for (var i=1;i<10;i++){
+	db.t1.insert({"No":i,"Name":"H"+i})
+}
+
+for (var i = 1; i <5; i++){
+db.t1.remove ({"No" : i})
+}
+
+
+
+db.faculty.aggregate(["$group":
+	{"_id":'$gender',"Average":
+	  {$avg:"$exp"}}
+])
+
+----------------------Interacting with cursors-------------------------
+
+var a = db.student.find({});
+while(a.hasNext()){
+	print(tojson(a.next()));}
+
+
+
